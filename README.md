@@ -1,36 +1,88 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# 🚀 Freelancer Landing Page
 
-## Getting Started
+Una landing page moderna y optimizada para freelancers, construida con **Next.js, Tailwind CSS, Express.js y PostgreSQL**. Diseñada para mostrar portafolios, servicios y facilitar el contacto con clientes.
 
-First, run the development server:
+## 🌟 Características
+- 🔥 **Frontend:** Next.js con Tailwind CSS para diseño rápido y responsivo.
+- ⚡ **Backend:** Express.js con PostgreSQL y Prisma ORM.
+- 🧠 **IA:** OpenAI GPT-4 + Langchain para generar contenido dinámico.
+- 📈 **SEO:** Meta tags dinámicas, Open Graph y Google Analytics.
+- 📩 **Formulario de contacto:** Almacena mensajes en PostgreSQL.
+- 🌍 **Despliegue:** Frontend en Vercel y Backend en Railway.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+---
+
+## 📌 Instalación y Configuración
+
+### 1️⃣ Clonar el repositorio
+```sh
+ git clone https://github.com/tu-usuario/freelancer-landing.git
+ cd freelancer-landing
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2️⃣ Configurar el Backend
+```sh
+ cd backend
+ npm install
+ cp .env.example .env # Configurar variables de entorno
+ npm run dev
+```
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+### 3️⃣ Configurar el Frontend
+```sh
+ cd ../frontend
+ npm install
+ cp .env.example .env # Configurar variables de entorno
+ npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 📂 Estructura del Proyecto
+```
+freelancer-landing/
+│── backend/          # Servidor Express.js con PostgreSQL y Prisma
+│── frontend/         # Aplicación Next.js con Tailwind CSS
+│── prisma/           # Esquema y migraciones de base de datos
+│── .env.example      # Variables de entorno de ejemplo
+│── README.md         # Documentación del proyecto
+```
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## ⚙️ Variables de Entorno
+Crea un archivo `.env` en `backend/` y `frontend/` con las siguientes variables:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Backend (`backend/.env`)
+```env
+DATABASE_URL=postgresql://usuario:contraseña@localhost:5432/freelancer_db
+OPENAI_API_KEY=tu_clave_openai
+```
 
-## Deploy on Vercel
+### Frontend (`frontend/.env`)
+```env
+NEXT_PUBLIC_API_URL=http://localhost:5000
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🚀 Despliegue
+### **Backend en Railway**
+```sh
+ railway up
+```
+
+### **Frontend en Vercel**
+```sh
+ vercel deploy
+```
+
+---
+
+## 📬 Contacto
+Si tienes dudas, contáctame en [tu-email@correo.com](mailto:tu-email@correo.com) o visita mi portafolio [aquí](https://tuportafolio.com).
+
+---
+
+### 📜 Licencia
+MIT License. ¡Úsalo libremente y mejora tu presencia en línea! 🚀
