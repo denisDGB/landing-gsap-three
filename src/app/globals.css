@@ -2,9 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Estilos globales */
+/* Tipografía y colores globales */
 body {
-  background-color: black;
-  color: white;
-  font-family: Arial, sans-serif;
+  font-family: 'Inter', sans-serif;
+  background-color: #0a0a0a;
+  color: #ffffff;
+}
+
+/* 🔴 Comenta o elimina el fondo degradado */
+/*
+.bg-gradient {
+  background: linear-gradient(180deg, rgba(10, 10, 10, 1) 0%, rgba(30, 30, 30, 1) 100%);
+}
+*/
+
+/* Suavizar transiciones */
+button, a, .project-card, .testimonial-card {
+  transition: all 0.3s ease-in-out;
 }
