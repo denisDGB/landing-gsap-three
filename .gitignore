@@ -17,6 +17,12 @@
 /.next/
 /out/
 
+# Evitar archivos grandes
+*.exe
+*.zip
+*.iso
+*.tar.gz
+
 # production
 /build
 
