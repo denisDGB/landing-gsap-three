@@ -12,6 +12,8 @@ import Background3D from "@/components/Background3D";
 
 gsap.registerPlugin(ScrollTrigger);
 
+console.log("API URL desde el servidor:", process.env.NEXT_PUBLIC_API_URL);
+
 export default function Home() {
   return (
     <div className="relative w-full">
@@ -22,6 +24,7 @@ export default function Home() {
       <Services />
       <Testimonials />
       <Contact />
+      <p className="text-center text-white mt-4">API URL: {process.env.NEXT_PUBLIC_API_URL}</p>
     </div>
   );
 }

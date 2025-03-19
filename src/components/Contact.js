@@ -4,14 +4,49 @@ import { useState } from "react";
 
 export default function Contact() {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert("Mensaje enviado (aún no conectado a backend)");
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    if (!formData.name || !formData.email || !formData.message) {
+      setError("⚠️ Todos los campos son obligatorios.");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/contact`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        setSuccess("✅ Mensaje enviado con éxito");
+        setFormData({ name: "", email: "", message: "" });
+      } else {
+        setError(`⚠️ Error: ${data.error}`);
+      }
+    } catch (error) {
+      console.error("Error al enviar el mensaje:", error);
+      setError("⚠️ Error al conectar con el servidor");
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -22,7 +57,7 @@ export default function Contact() {
           type="text"
           name="name"
           placeholder="Tu Nombre"
-          className="w-full p-3 mb-4 bg-gray-700 rounded"
+          className="w-full p-3 mb-4 bg-gray-700 rounded border border-gray-600 focus:border-blue-400 focus:ring-2 focus:ring-blue-300 outline-none"
           value={formData.name}
           onChange={handleChange}
         />
@@ -30,21 +65,27 @@ export default function Contact() {
           type="email"
           name="email"
           placeholder="Tu Email"
-          className="w-full p-3 mb-4 bg-gray-700 rounded"
+          className="w-full p-3 mb-4 bg-gray-700 rounded border border-gray-600 focus:border-blue-400 focus:ring-2 focus:ring-blue-300 outline-none"
           value={formData.email}
           onChange={handleChange}
         />
         <textarea
           name="message"
           placeholder="Tu Mensaje"
-          className="w-full p-3 mb-4 bg-gray-700 rounded"
+          className="w-full p-3 mb-4 bg-gray-700 rounded border border-gray-600 focus:border-blue-400 focus:ring-2 focus:ring-blue-300 outline-none"
           rows="4"
           value={formData.message}
           onChange={handleChange}
         />
-        <button type="submit" className="px-6 py-3 bg-blue-500 rounded-md text-lg font-semibold hover:bg-blue-600 transition">
-          Enviar
+        <button
+          type="submit"
+          className="w-full px-6 py-3 bg-blue-500 rounded-md text-lg font-semibold hover:bg-blue-600 transition disabled:bg-gray-500"
+          disabled={loading}
+        >
+          {loading ? "Enviando..." : "Enviar"}
         </button>
+        {error && <p className="text-red-400 mt-4">{error}</p>}
+        {success && <p className="text-green-400 mt-4">{success}</p>}
       </form>
     </section>
   );
