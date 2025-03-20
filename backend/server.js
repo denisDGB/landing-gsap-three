@@ -54,7 +54,7 @@ app.use(expressSanitizer());
 
 // Habilitar CORS correctamente
 app.use(cors({
-    origin: "http://localhost:3000", // Permitir solicitudes solo desde el frontend
+    origin: ["http://localhost:3000", "http://localhost:3001", "https://tuweb.vercel.app"],
     methods: "GET,POST,OPTIONS",
     allowedHeaders: "Content-Type"
 }));
