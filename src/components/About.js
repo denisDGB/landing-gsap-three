@@ -2,12 +2,16 @@
 
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function About() {
   const sectionRef = useRef(null);
   const textRef = useRef(null);
 
   useEffect(() => {
+    // Animación de entrada inicial para el texto
     gsap.from(textRef.current, {
       opacity: 0,
       y: 50,
@@ -15,6 +19,23 @@ export default function About() {
       delay: 0.3,
       ease: "power3.out",
     });
+
+    // Animación de opacidad al scrollear
+    gsap.fromTo(
+      sectionRef.current,
+      { opacity: 0, y: 50 }, // Estado inicial
+      {
+        opacity: 1,
+        y: 0,
+        duration: 1.2,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: sectionRef.current,
+          start: "top 80%", // Se activa cuando la sección está al 80% visible
+          toggleActions: "play none none reverse", // Reproduce la animación al bajar y revierte al subir
+        },
+      }
+    );
   }, []);
 
   return (
@@ -38,7 +59,7 @@ export default function About() {
         </p>
 
         <p className="mt-6">
-          Con más de <span className="text-blue-400 font-semibold">X años de experiencia</span>, he trabajado en 
+          Con más de <span className="text-blue-400 font-semibold">2 años de experiencia</span> , he trabajado en 
           diversos proyectos que combinan diseño, creatividad y tecnología. Mi objetivo es crear interfaces 
           atractivas y funcionales que mejoren la experiencia del usuario en la web.
         </p>

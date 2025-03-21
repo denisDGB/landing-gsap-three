@@ -48,7 +48,7 @@ export default function Testimonials() {
               key={index} 
               className="testimonial-card bg-gray-800 p-6 rounded-lg shadow-lg border-l-4 border-blue-500 hover:border-indigo-500 hover:scale-105 hover:shadow-xl transition"
             >
-              <p className="text-lg italic text-gray-300">"{testimonial.feedback}"</p>
+              <p className="text-lg italic text-gray-300">&quot;{testimonial.feedback}&quot;</p>
               <h3 className="text-xl font-bold mt-4">{testimonial.name}</h3>
             </div>
           ))}

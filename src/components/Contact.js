@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { API_URL } from "@/config"; // Importamos la URL del backend desde un archivo de configuración
 
 export default function Contact() {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
@@ -18,14 +19,17 @@ export default function Contact() {
     setError("");
     setSuccess("");
 
+    // ✅ Validación de Campos
     if (!formData.name || !formData.email || !formData.message) {
       setError("⚠️ Todos los campos son obligatorios.");
       setLoading(false);
       return;
     }
 
+    console.log("Enviando datos a:", `${API_URL}/api/contact`); // Debugging: Verificar si API_URL es correcta
+
     try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/contact`, {
+      const res = await fetch(`${API_URL}/api/contact`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -33,14 +37,13 @@ export default function Contact() {
         body: JSON.stringify(formData),
       });
 
-      const data = await res.json();
-
-      if (res.ok) {
-        setSuccess("✅ Mensaje enviado con éxito");
-        setFormData({ name: "", email: "", message: "" });
-      } else {
-        setError(`⚠️ Error: ${data.error}`);
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || "Error al enviar el mensaje");
       }
+
+      setSuccess("✅ Mensaje enviado con éxito");
+      setFormData({ name: "", email: "", message: "" });
     } catch (error) {
       console.error("Error al enviar el mensaje:", error);
       setError("⚠️ Error al conectar con el servidor");
@@ -90,3 +93,4 @@ export default function Contact() {
     </section>
   );
 }
+

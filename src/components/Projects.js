@@ -4,14 +4,9 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
+import { projects } from "@/data/projects"; // Importamos los datos desde el archivo
 
 gsap.registerPlugin(ScrollTrigger);
-
-const projects = [
-  { title: "Proyecto 1", image: "/project1.jpg", link: "#" },
-  { title: "Proyecto 2", image: "/project2.jpg", link: "#" },
-  { title: "Proyecto 3", image: "/project3.jpg", link: "#" },
-];
 
 export default function Projects() {
   const sectionRef = useRef(null);
@@ -73,4 +68,3 @@ export default function Projects() {
     </section>
   );
 }
-
