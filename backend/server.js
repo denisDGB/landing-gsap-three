@@ -46,7 +46,7 @@ app.use(limiter);
 
 // 🔹 Habilitar CORS para permitir el acceso solo desde los dominios permitidos
 app.use(cors({
-    origin: ["http://localhost:3000", "http://localhost:3001", "https://denis-dev.vercel.app/"],
+    origin: ["http://localhost:3000", "http://localhost:3001", "https://denis-dev.vercel.app"],
     methods: "GET,POST,OPTIONS",
     allowedHeaders: "Content-Type"
 }));
