@@ -45,11 +45,13 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // 🔹 Habilitar CORS para permitir el acceso solo desde los dominios permitidos
-app.use(cors({
-    origin: ["http://localhost:3000", "http://localhost:3001", "https://denis-dev.vercel.app"],
-    methods: "GET,POST,OPTIONS",
-    allowedHeaders: "Content-Type"
-}));
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "https://denis-dev.vercel.app"); // 🔹 Permitir Vercel
+    res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.header("Access-Control-Allow-Headers", "Content-Type");
+    res.header("Access-Control-Allow-Credentials", "true"); // 🔹 Necesario si usas autenticación
+    next();
+});
 
 // 🔹 Habilitar JSON y formularios
 app.use(express.json({ limit: "10mb", type: "application/json" }));
@@ -60,8 +62,8 @@ app.get("/", (req, res) => {
     res.send("🚀 Servidor funcionando correctamente.");
 });
 
-// ✅ Manejo de pre-flight requests de CORS
-app.options("/api/contact", (req, res) => {
+// ✅ Habilitar Pre-flight requests para todas las rutas
+app.options("*", (req, res) => {
     res.sendStatus(200);
 });
 
