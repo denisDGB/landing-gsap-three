@@ -44,14 +44,16 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// 🔹 Habilitar CORS para permitir el acceso solo desde los dominios permitidos
-app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "https://denis-dev.vercel.app");
-    res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-    res.header("Access-Control-Allow-Credentials", "true");
-    next();
-});
+// ✅ **CORRECTA CONFIGURACIÓN DE CORS**
+app.use(cors({
+    origin: ["https://denis-dev.vercel.app"],  // 🔹 Permitir solo el frontend
+    methods: ["GET", "POST", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true
+}));
+
+// ✅ Manejo de Pre-flight requests para todas las rutas
+app.options("*", cors());
 
 // 🔹 Habilitar JSON y formularios
 app.use(express.json({ limit: "10mb", type: "application/json" }));
@@ -60,11 +62,6 @@ app.use(express.urlencoded({ extended: true }));
 // ✅ Verificar que el servidor está funcionando
 app.get("/", (req, res) => {
     res.send("🚀 Servidor funcionando correctamente.");
-});
-
-// ✅ Habilitar Pre-flight requests para todas las rutas
-app.options("*", (req, res) => {
-    res.sendStatus(200);
 });
 
 // ✅ Ruta para recibir mensajes del formulario y guardarlos en PostgreSQL
