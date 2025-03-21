@@ -46,10 +46,10 @@ app.use(limiter);
 
 // 🔹 Habilitar CORS para permitir el acceso solo desde los dominios permitidos
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "https://denis-dev.vercel.app"); // 🔹 Permitir Vercel
+    res.header("Access-Control-Allow-Origin", "https://denis-dev.vercel.app");
     res.header("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-    res.header("Access-Control-Allow-Headers", "Content-Type");
-    res.header("Access-Control-Allow-Credentials", "true"); // 🔹 Necesario si usas autenticación
+    res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.header("Access-Control-Allow-Credentials", "true");
     next();
 });
 
