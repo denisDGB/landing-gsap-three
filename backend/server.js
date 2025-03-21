@@ -44,29 +44,41 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// ✅ **CORRECTA CONFIGURACIÓN DE CORS**
+// ✅ **CORRECCIÓN: Configuración correcta de CORS**
+const allowedOrigins = [
+    "http://localhost:3000",
+    "http://localhost:3001",
+    "https://denis-dev.vercel.app"
+];
+
 app.use(cors({
-    origin: ["https://denis-dev.vercel.app"],  // 🔹 Permitir solo el frontend
-    methods: ["GET", "POST", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization"],
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error("❌ No permitido por CORS"));
+        }
+    },
+    methods: "GET,POST,OPTIONS",
+    allowedHeaders: "Content-Type,Authorization",
     credentials: true
 }));
 
-// ✅ Manejo de Pre-flight requests para todas las rutas
-app.options("*", cors());
-
-// 🔹 Habilitar JSON y formularios
+// Habilitar JSON y formularios
 app.use(express.json({ limit: "10mb", type: "application/json" }));
 app.use(express.urlencoded({ extended: true }));
 
-// ✅ Verificar que el servidor está funcionando
+// ✅ **Habilitar Pre-flight requests para todas las rutas**
+app.options("*", cors());
+
+// ✅ **Ruta de prueba**
 app.get("/", (req, res) => {
     res.send("🚀 Servidor funcionando correctamente.");
 });
 
-// ✅ Ruta para recibir mensajes del formulario y guardarlos en PostgreSQL
+// ✅ **Ruta para recibir mensajes del formulario**
 app.post("/api/contact", async (req, res) => {
-    console.log("📩 Datos recibidos en /api/contact:", req.body); // 📡 Debugging
+    console.log("📩 Datos recibidos en /api/contact:", req.body);
 
     try {
         let { name, email, message } = req.body;
@@ -76,7 +88,7 @@ app.post("/api/contact", async (req, res) => {
         email = req.sanitize(email);
         message = req.sanitize(message);
 
-        // 🔹 Validaciones básicas
+        // 🔹 Validaciones
         if (!name || !email || !message) {
             console.log("⚠️ Error: Campos obligatorios vacíos.");
             return res.status(400).json({ error: "⚠️ Todos los campos son obligatorios" });
@@ -101,32 +113,6 @@ app.post("/api/contact", async (req, res) => {
 
         console.log("✅ Mensaje guardado en la base de datos:", newMessage);
 
-        // 🔹 Enviar correo de notificación
-        const transporter = nodemailer.createTransport({
-            host: process.env.EMAIL_HOST,
-            port: process.env.EMAIL_PORT,
-            secure: false,
-            auth: {
-                user: process.env.EMAIL_USER,
-                pass: process.env.EMAIL_PASS,
-            },
-        });
-
-        const mailOptions = {
-            from: `Contacto Web <${process.env.EMAIL_USER}>`,
-            to: process.env.EMAIL_TO,
-            subject: "Nuevo mensaje de contacto",
-            text: `Has recibido un nuevo mensaje.\n\nNombre: ${name}\nEmail: ${email}\nMensaje: ${message}`,
-        };
-
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.error("⚠️ Error al enviar el correo:", error);
-            } else {
-                console.log("✅ Correo enviado:", info.response);
-            }
-        });
-
         res.status(201).json({ success: true, message: "✅ Mensaje enviado con éxito" });
 
     } catch (error) {
@@ -135,7 +121,7 @@ app.post("/api/contact", async (req, res) => {
     }
 });
 
-// ✅ 🔹 Capturar rutas inexistentes
+// ✅ **Capturar rutas inexistentes**
 app.all("*", (req, res) => {
     console.log(`❌ Ruta no encontrada: ${req.method} ${req.url}`);
     res.status(404).json({ error: "❌ Ruta no encontrada en el backend." });
