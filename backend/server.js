@@ -5,22 +5,21 @@ const rateLimit = require("express-rate-limit");
 const xss = require("xss-clean");
 const helmet = require("helmet");
 const expressSanitizer = require("express-sanitizer");
-const nodemailer = require("nodemailer");
 const hpp = require("hpp");
 const slowDown = require("express-slow-down");
 const compression = require("compression");
 const morgan = require("morgan");
-require("dotenv").config();
+require("dotenv").config(); // Cargar variables de entorno
+
+// ✅ **Verificar que las variables de entorno se están cargando**
+console.log("🔎 Variables de entorno cargadas:");
+console.log("🌍 CORS_ORIGIN:", process.env.CORS_ORIGIN || "No definida");
+console.log("📡 DATABASE_URL:", process.env.DATABASE_URL || "No definida");
 
 const prisma = new PrismaClient();
 const app = express();
 
-// 🚀 Logs para verificar qué rutas está cargando Railway
-console.log("✅ Cargando servidor Express...");
-console.log(`🌐 Dominio permitido en CORS: ${process.env.CORS_ORIGIN || "No definido"}`);
-console.log(`📡 Conectando a la base de datos: ${process.env.DATABASE_URL || "No definida"}`);
-
-// 🔹 Middleware de seguridad y rendimiento
+// 🚀 **Middleware de seguridad y rendimiento**
 app.use(compression());
 app.use(morgan("combined"));
 app.use(helmet());
@@ -28,7 +27,7 @@ app.use(xss());
 app.use(hpp());
 app.use(expressSanitizer());
 
-// 🔹 Protección contra ataques de fuerza bruta
+// 🔹 **Protección contra ataques de fuerza bruta**
 const speedLimiter = slowDown({
     windowMs: 15 * 60 * 1000,
     delayAfter: 50,
@@ -36,7 +35,7 @@ const speedLimiter = slowDown({
 });
 app.use(speedLimiter);
 
-// 🔹 Límite de solicitudes para evitar abuso
+// 🔹 **Límite de solicitudes**
 const limiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 100,
@@ -44,12 +43,13 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// ✅ **CORRECCIÓN: Configuración correcta de CORS**
-const allowedOrigins = [
+// ✅ **Configuración de CORS**
+const allowedOrigins = process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(",") : [
     "http://localhost:3000",
-    "http://localhost:3001",
     "https://denis-dev.vercel.app"
 ];
+
+console.log("✅ Dominios permitidos en CORS:", allowedOrigins);
 
 app.use(cors({
     origin: function (origin, callback) {
@@ -64,37 +64,42 @@ app.use(cors({
     credentials: true
 }));
 
-// Habilitar JSON y formularios
+// 🔹 **Habilitar JSON y formularios**
 app.use(express.json({ limit: "10mb", type: "application/json" }));
 app.use(express.urlencoded({ extended: true }));
 
-// ✅ **Habilitar Pre-flight requests para todas las rutas**
-app.options("*", cors());
+// ✅ **Habilitar Pre-flight requests correctamente**
+app.options("*", (req, res) => {
+    res.setHeader("Access-Control-Allow-Origin", allowedOrigins.join(","));
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.sendStatus(200);
+});
 
-// ✅ **Ruta de prueba**
+// ✅ **Ruta de prueba para verificar el backend**
 app.get("/", (req, res) => {
     res.send("🚀 Servidor funcionando correctamente.");
 });
 
-// ✅ **Ruta para recibir mensajes del formulario**
+// ✅ **Ruta de contacto**
 app.post("/api/contact", async (req, res) => {
     console.log("📩 Datos recibidos en /api/contact:", req.body);
 
     try {
         let { name, email, message } = req.body;
 
-        // Sanitizar entradas
+        // **Sanitizar entradas**
         name = req.sanitize(name);
         email = req.sanitize(email);
         message = req.sanitize(message);
 
-        // 🔹 Validaciones
+        // 🔹 **Validaciones**
         if (!name || !email || !message) {
             console.log("⚠️ Error: Campos obligatorios vacíos.");
             return res.status(400).json({ error: "⚠️ Todos los campos son obligatorios" });
         }
 
-        // 🔹 Validación de email
         const emailRegex = /^[^@]+@[^@]+\.[^@]+$/;
         if (!emailRegex.test(email)) {
             console.log("⚠️ Error: Email inválido.");
@@ -106,7 +111,7 @@ app.post("/api/contact", async (req, res) => {
             return res.status(400).json({ error: "⚠️ El mensaje no puede exceder 500 caracteres" });
         }
 
-        // 🔹 Guardar mensaje en la base de datos
+        // 🔹 **Guardar mensaje en la base de datos**
         const newMessage = await prisma.contactMessage.create({
             data: { name, email, message },
         });
@@ -127,8 +132,21 @@ app.all("*", (req, res) => {
     res.status(404).json({ error: "❌ Ruta no encontrada en el backend." });
 });
 
-// 🔹 Iniciar servidor
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-    console.log(`🚀 Servidor corriendo en el puerto ${PORT}`);
-});
+// ✅ **Verificar conexión a la base de datos antes de iniciar**
+async function startServer() {
+    try {
+        await prisma.$connect();
+        console.log("✅ Conectado a la base de datos correctamente.");
+
+        const PORT = process.env.PORT || 5000;
+        app.listen(PORT, () => {
+            console.log(`🚀 Servidor corriendo en el puerto ${PORT}`);
+        });
+
+    } catch (error) {
+        console.error("❌ Error conectando a la base de datos:", error);
+        process.exit(1);
+    }
+}
+
+startServer();
