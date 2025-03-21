@@ -46,19 +46,14 @@ app.use(limiter);
 // ✅ **Configuración de CORS**
 const allowedOrigins = process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(",") : [
     "http://localhost:3000",
-    "https://denis-dev.vercel.app"
+    "https://denis-dev.vercel.app",
+    "https://landing-gsap-three-production-2c76.up.railway.app"
 ];
 
 console.log("✅ Dominios permitidos en CORS:", allowedOrigins);
 
 app.use(cors({
-    origin: function (origin, callback) {
-        if (!origin || allowedOrigins.includes(origin)) {
-            callback(null, true);
-        } else {
-            callback(new Error("❌ No permitido por CORS"));
-        }
-    },
+    origin: allowedOrigins, // <- Permitir múltiples orígenes directamente
     methods: "GET,POST,OPTIONS",
     allowedHeaders: "Content-Type,Authorization",
     credentials: true
