@@ -41,16 +41,16 @@ console.log("✅ Dominios permitidos:", allowedOrigins);
 // ✅ CORS dinámico
 const corsOptions = {
   origin: function (origin, callback) {
-    console.log("🌐 Solicitud desde:", origin);
     if (!origin || allowedOrigins.includes(origin)) {
-      console.log("✅ CORS permitido:", origin);
       callback(null, true);
     } else {
-      console.warn("❌ CORS bloqueado:", origin);
       callback(new Error("CORS bloqueado: " + origin));
     }
   },
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
+  allowedHeaders: "Origin,X-Requested-With,Content-Type,Accept,Authorization",
   credentials: true,
+  optionsSuccessStatus: 200,
 };
 
 app.use(cors(corsOptions));
