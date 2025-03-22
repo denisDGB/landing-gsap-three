@@ -11,20 +11,20 @@ const compression = require("compression");
 const morgan = require("morgan");
 require("dotenv").config();
 
-// 📌 Mostrar entorno cargado
+// 🌐 Mostrar entorno
 console.log("🌍 CORS_ORIGIN:", process.env.CORS_ORIGIN);
 console.log("📡 DATABASE_URL:", process.env.DATABASE_URL ? "OK ✅" : "Falta ❌");
 
+// 🛠️ Inicializar
 const prisma = new PrismaClient();
 const app = express();
 
-// ✅ Lista de dominios permitidos desde .env
-// ✅ Limpiar comillas de Railway que causa CORS error
+// ✅ Limpiar comillas de Railway y separar dominios
 const allowedOrigins = process.env.CORS_ORIGIN
-  ? process.env.CORS_ORIGIN.replace(/"/g, "").split(",")
-  : [];
+  ? process.env.CORS_ORIGIN.replace(/['"]+/g, "").split(",")
+  : ["http://localhost:3000", "https://denis-dev.vercel.app"];
 
-// 🛡️ Seguridad y rendimiento
+// 🧱 Middlewares de seguridad y rendimiento
 app.use(compression());
 app.use(morgan("combined"));
 app.use(helmet());
@@ -34,7 +34,7 @@ app.use(expressSanitizer());
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 
-// 🛡️ Rate limit y slow down
+// 🚦 Límite y retardo para prevenir abuso
 app.use(slowDown({ windowMs: 15 * 60 * 1000, delayAfter: 50, delayMs: 500 }));
 app.use(rateLimit({
   windowMs: 15 * 60 * 1000,
@@ -42,7 +42,7 @@ app.use(rateLimit({
   message: "⚠️ Demasiadas solicitudes, intenta más tarde."
 }));
 
-// ✅ Configurar CORS dinámico
+// ✅ Configurar CORS dinámicamente
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
@@ -55,14 +55,20 @@ const corsOptions = {
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions)); // <- Manejo preflight global
+app.options("*", cors(corsOptions), (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", req.headers.origin || "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.sendStatus(200);
+});
 
-// ✅ Ruta base
+// ✅ Ruta raíz
 app.get("/", (req, res) => {
   res.send("🚀 Servidor Express funcionando desde Railway.");
 });
 
-// ✅ Ruta de contacto
+// 📩 Ruta de contacto
 app.post("/api/contact", async (req, res) => {
   try {
     let { name, email, message } = req.body;
@@ -95,12 +101,12 @@ app.post("/api/contact", async (req, res) => {
   }
 });
 
-// 404
+// ❌ Ruta no encontrada
 app.all("*", (req, res) => {
   res.status(404).json({ error: "Ruta no encontrada ❌" });
 });
 
-// 🔥 Iniciar servidor
+// 🚀 Iniciar servidor
 async function startServer() {
   try {
     await prisma.$connect();
