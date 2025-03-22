@@ -31,10 +31,10 @@ app.use(express.urlencoded({ extended: true }));
 app.use(slowDown({ windowMs: 15 * 60 * 1000, delayAfter: 50, delayMs: 500 }));
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 
-// ✅ Lista dinámica de dominios permitidos
-const allowedOrigins = process.env.CORS_ORIGIN
-  ? process.env.CORS_ORIGIN.replace(/['"]+/g, "").split(",")
-  : [];
+// ✅ Dominios permitidos (limpia comillas y espacios)
+const allowedOrigins = (process.env.CORS_ORIGIN || "")
+  .split(",")
+  .map(origin => origin.trim().replace(/^"|"$/g, ""));
 
 console.log("✅ Dominios permitidos:", allowedOrigins);
 
@@ -44,11 +44,13 @@ const corsOptions = {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
+      console.warn("❌ CORS bloqueado:", origin);
       callback(new Error("CORS bloqueado: " + origin));
     }
   },
   credentials: true,
 };
+
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
 
