@@ -15,6 +15,9 @@ export default function Contact() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("✅ handleSubmit activado");
+    console.log("📨 Datos a enviar:", formData);
+
     setLoading(true);
     setError("");
     setSuccess("");
@@ -28,6 +31,8 @@ export default function Contact() {
     }
 
     console.log("📡 Enviando datos a:", `${API_URL}/api/contact`);
+    console.log("📨 Enviando datos del formulario:", formData);
+
 
     try {
       const res = await fetch(`${API_URL}/api/contact`, {
@@ -44,7 +49,7 @@ export default function Contact() {
       setSuccess("✅ Mensaje enviado con éxito");
       setFormData({ name: "", email: "", message: "" });
     } catch (err) {
-      console.error("❌ Error al enviar el mensaje:", err);
+      console.error("❌ Error al enviar el mensaje:", error.mesage, error);
       setError("⚠️ Error al conectar con el servidor");
     }
 
