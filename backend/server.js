@@ -19,7 +19,10 @@ const prisma = new PrismaClient();
 const app = express();
 
 // ✅ Lista de dominios permitidos desde .env
-const allowedOrigins = process.env.CORS_ORIGIN?.split(",") || [];
+// ✅ Limpiar comillas de Railway que causa CORS error
+const allowedOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.replace(/"/g, "").split(",")
+  : [];
 
 // 🛡️ Seguridad y rendimiento
 app.use(compression());
