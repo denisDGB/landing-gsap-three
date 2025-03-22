@@ -1,7 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { API_URL } from "@/config"; // ✅ URL dinámica del backend
+import { API_URL } from "@/config";
+
+console.log("📡 API_URL cargado:", API_URL); //Si consola lee .env
 
 export default function Contact() {
   const [formData, setFormData] = useState({ name: "", email: "", message: "" });
@@ -22,17 +24,12 @@ export default function Contact() {
     setError("");
     setSuccess("");
 
-    // 🔎 Validación rápida
     const { name, email, message } = formData;
     if (!name || !email || !message) {
       setError("⚠️ Todos los campos son obligatorios.");
       setLoading(false);
       return;
     }
-
-    console.log("📡 Enviando datos a:", `${API_URL}/api/contact`);
-    console.log("📨 Enviando datos del formulario:", formData);
-
 
     try {
       const res = await fetch(`${API_URL}/api/contact`, {
@@ -41,15 +38,18 @@ export default function Contact() {
         body: JSON.stringify(formData),
       });
 
+      const data = await res.json();
+
       if (!res.ok) {
-        const errorData = await res.json();
-        throw new Error(errorData.error || "Error al enviar el mensaje");
+        throw new Error(data.error || "❌ Error al enviar el mensaje");
       }
 
       setSuccess("✅ Mensaje enviado con éxito");
       setFormData({ name: "", email: "", message: "" });
+
+      // Aquí podrías hacer tracking, analytics o notificación
     } catch (err) {
-      console.error("❌ Error al enviar el mensaje:", error.mesage, error);
+      console.error("❌ Error al enviar el mensaje:", err.message);
       setError("⚠️ Error al conectar con el servidor");
     }
 
@@ -97,8 +97,16 @@ export default function Contact() {
           {loading ? "Enviando..." : "Enviar"}
         </button>
 
-        {error && <p className="text-red-400 mt-4">{error}</p>}
-        {success && <p className="text-green-400 mt-4">{success}</p>}
+        {error && (
+          <p className="text-red-400 mt-4 flex items-center gap-2">
+            ❌ {error}
+          </p>
+        )}
+        {success && (
+          <p className="text-green-400 mt-4 flex items-center gap-2">
+            ✅ {success}
+          </p>
+        )}
       </form>
     </section>
   );
