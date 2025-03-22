@@ -18,40 +18,48 @@ console.log("📡 DATABASE_URL:", process.env.DATABASE_URL ? "Definida ✅" : "N
 const prisma = new PrismaClient();
 const app = express();
 
-// ✅ Obtener allowedOrigins desde ENV con limpieza de comillas
+// ✅ Limpiar CORS_ORIGIN y convertir a array
 const allowedOrigins = process.env.CORS_ORIGIN
   ? process.env.CORS_ORIGIN.replace(/"/g, "").split(",").map(origin => origin.trim())
   : [];
 
-console.log("✅ Dominios permitidos en CORS:", allowedOrigins);
+console.log("✅ Orígenes permitidos (CORS):", allowedOrigins);
 
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      callback(new Error("❌ Not allowed by CORS: " + origin));
+      console.log("⛔ CORS bloqueado para:", origin);
+      callback(new Error("No permitido por CORS"));
     }
   },
   credentials: true,
 };
 
+// ✅ Aplicar CORS global
 app.use(cors(corsOptions));
+
+// ✅ Preflight request manual (OPTIONS)
 app.options("*", cors(corsOptions), (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", req.headers.origin);
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
+  res.setHeader("Access-Control-Allow-Credentials", "true");
   res.sendStatus(200);
 });
 
-// 🚀 Middlewares de seguridad y rendimiento
+// ✅ Seguridad y optimizaciones
 app.use(compression());
 app.use(morgan("combined"));
 app.use(helmet());
 app.use(xss());
 app.use(hpp());
 app.use(expressSanitizer());
-
 app.use(express.json({ limit: "10mb", type: "application/json" }));
 app.use(express.urlencoded({ extended: true }));
 
+// ✅ Protección contra fuerza bruta y abuso
 const speedLimiter = slowDown({
   windowMs: 15 * 60 * 1000,
   delayAfter: 50,
@@ -66,12 +74,12 @@ const limiter = rateLimit({
 });
 app.use(limiter);
 
-// 🔹 Ruta de prueba
+// ✅ Ruta de prueba
 app.get("/", (req, res) => {
   res.send("🚀 Servidor funcionando correctamente.");
 });
 
-// 📩 Ruta de contacto
+// ✅ Ruta /api/contact para guardar mensajes
 app.post("/api/contact", async (req, res) => {
   console.log("📩 Datos recibidos en /api/contact:", req.body);
 
@@ -111,13 +119,13 @@ app.post("/api/contact", async (req, res) => {
   }
 });
 
-// ❌ Ruta no encontrada
+// ❌ Rutas no definidas
 app.all("*", (req, res) => {
   console.log(`❌ Ruta no encontrada: ${req.method} ${req.url}`);
   res.status(404).json({ error: "❌ Ruta no encontrada en el backend." });
 });
 
-// 🚀 Iniciar servidor
+// 🚀 Iniciar el servidor
 async function startServer() {
   try {
     await prisma.$connect();
