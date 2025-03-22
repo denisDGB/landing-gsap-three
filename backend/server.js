@@ -18,14 +18,14 @@ console.log("📡 DATABASE_URL:", process.env.DATABASE_URL ? "Definida ✅" : "N
 const prisma = new PrismaClient();
 const app = express();
 
-// ✅ Lista de dominios permitidos para CORS
-const allowedOrigins = [
-  "https://denis-dev.vercel.app",
-  "http://localhost:3000",
-];
+// ✅ Obtener allowedOrigins desde ENV con limpieza de comillas
+const allowedOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.replace(/"/g, "").split(",").map(origin => origin.trim())
+  : [];
 
-// ✅ Configuración dinámica de CORS
-app.use(cors({
+console.log("✅ Dominios permitidos en CORS:", allowedOrigins);
+
+const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
@@ -34,19 +34,10 @@ app.use(cors({
     }
   },
   credentials: true,
-}));
+};
 
-// ✅ Respuesta al preflight
-app.options("*", cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("❌ Not allowed by CORS: " + origin));
-    }
-  },
-  credentials: true,
-}), (req, res) => {
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions), (req, res) => {
   res.sendStatus(200);
 });
 
