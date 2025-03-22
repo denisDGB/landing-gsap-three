@@ -11,18 +11,14 @@ const compression = require("compression");
 const morgan = require("morgan");
 require("dotenv").config();
 
+// 🌍 Logs de entorno
+console.log("🔎 CORS_ORIGIN:", process.env.CORS_ORIGIN);
+console.log("📡 DATABASE_URL:", process.env.DATABASE_URL ? "OK ✅" : "Falta ❌");
+
 const app = express();
 const prisma = new PrismaClient();
 
-// 🟡 Limpiar comillas y generar lista de orígenes permitidos
-const allowedOrigins = (process.env.CORS_ORIGIN || "")
-  .replace(/['"]/g, "") // eliminar comillas dobles o simples
-  .split(",")
-  .map(origin => origin.trim());
-
-console.log("🌍 CORS_ORIGIN permitidos:", allowedOrigins);
-
-// 🔐 Middleware de seguridad
+// 🔐 Seguridad y rendimiento
 app.use(compression());
 app.use(morgan("dev"));
 app.use(helmet());
@@ -32,32 +28,40 @@ app.use(expressSanitizer());
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 
-// 🚀 Rate limiter y slowdown
+// 🕓 Rate limiter
 app.use(slowDown({ windowMs: 15 * 60 * 1000, delayAfter: 50, delayMs: 500 }));
 app.use(rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
-  message: "⚠️ Demasiadas solicitudes, intenta más tarde.",
+  message: "⚠️ Muchas solicitudes. Intenta más tarde."
 }));
 
-// ✅ Configurar CORS correctamente
+// 🌐 CORS — permitir Vercel
+const allowedOrigins = (process.env.CORS_ORIGIN || "")
+  .replace(/['"]+/g, "")
+  .split(",");
+
+console.log("✅ allowedOrigins:", allowedOrigins);
+
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
-      console.log("⛔ Origin bloqueado:", origin);
+      console.log("❌ CORS bloqueado para:", origin);
       callback(new Error("No permitido por CORS"));
     }
   },
   credentials: true,
+  optionsSuccessStatus: 200,
 };
+
 app.use(cors(corsOptions));
 app.options("*", cors(corsOptions));
 
-// 🧪 Ruta test
+// 🧪 Ruta base
 app.get("/", (req, res) => {
-  res.send("🚀 Backend funcionando correctamente desde Railway");
+  res.send("🚀 Servidor corriendo correctamente.");
 });
 
 // 📩 Ruta de contacto
@@ -72,44 +76,43 @@ app.post("/api/contact", async (req, res) => {
       return res.status(400).json({ error: "Todos los campos son obligatorios" });
     }
 
-    const emailRegex = /^[^@]+@[^@]+\.[^@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!/^[^@]+@[^@]+\.[^@]+$/.test(email)) {
       return res.status(400).json({ error: "Email inválido" });
     }
 
     if (message.length > 500) {
-      return res.status(400).json({ error: "Mensaje demasiado largo" });
+      return res.status(400).json({ error: "Mensaje muy largo" });
     }
 
-    const newMessage = await prisma.contactMessage.create({
+    const nuevo = await prisma.contactMessage.create({
       data: { name, email, message },
     });
 
-    console.log("📨 Mensaje guardado:", newMessage);
+    console.log("📨 Mensaje guardado:", nuevo);
     res.status(201).json({ success: true, message: "Mensaje enviado con éxito ✅" });
-  } catch (err) {
-    console.error("❌ Error en /api/contact:", err);
+  } catch (error) {
+    console.error("❌ Error en /api/contact:", error);
     res.status(500).json({ error: "Error en el servidor" });
   }
 });
 
-// ❌ Rutas no encontradas
+// 404
 app.all("*", (req, res) => {
-  res.status(404).json({ error: "Ruta no encontrada" });
+  res.status(404).json({ error: "Ruta no encontrada ❌" });
 });
 
 // 🔥 Iniciar servidor
 async function startServer() {
   try {
     await prisma.$connect();
-    console.log("✅ Conectado a la base de datos");
+    console.log("✅ Conectado a PostgreSQL con Prisma");
 
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => {
-      console.log(`🚀 Servidor en puerto ${PORT}`);
+      console.log(`🚀 Servidor corriendo en puerto ${PORT}`);
     });
-  } catch (error) {
-    console.error("❌ Error al conectar DB:", error);
+  } catch (err) {
+    console.error("❌ Error conectando a DB:", err);
     process.exit(1);
   }
 }
