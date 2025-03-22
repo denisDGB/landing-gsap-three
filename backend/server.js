@@ -41,7 +41,9 @@ console.log("✅ Dominios permitidos:", allowedOrigins);
 // ✅ CORS dinámico
 const corsOptions = {
   origin: function (origin, callback) {
+    console.log("🌐 Solicitud desde:", origin);
     if (!origin || allowedOrigins.includes(origin)) {
+      console.log("✅ CORS permitido:", origin);
       callback(null, true);
     } else {
       console.warn("❌ CORS bloqueado:", origin);
