@@ -9,6 +9,7 @@ const hpp = require("hpp");
 const slowDown = require("express-slow-down");
 const compression = require("compression");
 const morgan = require("morgan");
+const adminRoutes = require("./routes/admin");
 require("dotenv").config();
 
 console.log("🌍 CORS_ORIGIN:", process.env.CORS_ORIGIN);
@@ -26,6 +27,7 @@ app.use(hpp());
 app.use(expressSanitizer());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use("/api/admin", adminRoutes);
 
 // 🛡️ Rate limit
 app.use(slowDown({ windowMs: 15 * 60 * 1000, delayAfter: 50, delayMs: 500 }));
@@ -90,6 +92,65 @@ app.post("/api/contact", async (req, res) => {
   } catch (err) {
     console.error("❌ Error:", err);
     res.status(500).json({ error: "Error en el servidor" });
+  }
+});
+
+// ❌ Eliminar mensaje por ID
+app.delete("/api/messages/:id", async (req, res) => {
+  const auth = req.headers.authorization;
+  const token = auth?.split(" ")[1];
+
+  if (!token) return res.status(401).json({ error: "Falta token" });
+
+  try {
+    const decoded = require("jsonwebtoken").verify(token, process.env.JWT_SECRET);
+    const messageId = parseInt(req.params.id);
+
+    const deleted = await prisma.contactMessage.delete({
+      where: { id: messageId },
+    });
+
+    res.status(200).json({ success: true, deleted });
+  } catch (err) {
+    console.error("❌ Error al eliminar mensaje:", err);
+    res.status(401).json({ error: "Token inválido o ID no encontrado" });
+  }
+});
+
+// Añade al final de tu server.js, antes del 404
+const jwt = require("jsonwebtoken");
+
+function authMiddleware(req, res, next) {
+  const token = req.headers.authorization?.split(" ")[1];
+  if (!token) return res.status(401).json({ error: "Token requerido" });
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    req.user = decoded;
+    next();
+  } catch {
+    res.status(403).json({ error: "Token inválido" });
+  }
+}
+
+app.get("/api/messages", authMiddleware, async (req, res) => {
+  const messages = await prisma.contactMessage.findMany({
+    orderBy: { createdAt: "desc" },
+  });
+  res.json(messages);
+});
+
+const auth = require("./middleware/auth");
+
+app.get("/api/messages", auth, async (req, res) => {
+  try {
+    const messages = await prisma.contactMessage.findMany({
+      orderBy: { createdAt: "desc" }
+    });
+    res.json(messages);
+  } catch (err) {
+    console.error("❌ Error al obtener mensajes:", err);
+    res.status(500).json({ error: "Error al obtener mensajes" });
   }
 });
 
