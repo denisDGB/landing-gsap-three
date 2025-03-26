@@ -1,6 +1,4 @@
-// ✅ src/app/admin/login/page.jsx
 "use client";
-
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
@@ -30,17 +28,17 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen bg-gray-900 flex items-center justify-center px-4">
       <form
         onSubmit={handleLogin}
-        className="bg-white p-8 rounded-xl shadow-md w-full max-w-sm"
+        className="bg-gray-800 text-white p-8 rounded-xl shadow-xl w-full max-w-sm"
       >
-        <h1 className="text-2xl font-bold mb-6">Panel Admin</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center">🔐 Panel Admin</h1>
 
         <input
           type="text"
           placeholder="Usuario"
-          className="w-full mb-4 p-2 border rounded"
+          className="w-full mb-4 p-2 rounded bg-gray-700 text-white placeholder-gray-400"
           value={user}
           onChange={(e) => setUser(e.target.value)}
         />
@@ -48,20 +46,22 @@ export default function LoginPage() {
         <input
           type="password"
           placeholder="Contraseña"
-          className="w-full mb-4 p-2 border rounded"
+          className="w-full mb-4 p-2 rounded bg-gray-700 text-white placeholder-gray-400"
           value={pass}
           onChange={(e) => setPass(e.target.value)}
         />
 
-        {error && <p className="text-red-600 text-sm mb-2">❌ {error}</p>}
+        {error && (
+          <p className="text-red-400 text-sm mb-4 text-center">❌ {error}</p>
+        )}
 
         <button
           type="submit"
-          className="w-full bg-black text-white py-2 rounded hover:opacity-90"
+          className="w-full bg-blue-600 hover:bg-blue-700 py-2 rounded text-white font-semibold"
         >
           Ingresar
         </button>
       </form>
     </div>
   );
-} 
+}

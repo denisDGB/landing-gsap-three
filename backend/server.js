@@ -9,16 +9,17 @@ const hpp = require("hpp");
 const slowDown = require("express-slow-down");
 const compression = require("compression");
 const morgan = require("morgan");
-const adminRoutes = require("./routes/admin");
+const jwt = require("jsonwebtoken");
 require("dotenv").config();
-
-console.log("🌍 CORS_ORIGIN:", process.env.CORS_ORIGIN);
-console.log("📡 DATABASE_URL:", process.env.DATABASE_URL ? "✅ OK" : "❌ FALTA");
 
 const app = express();
 const prisma = new PrismaClient();
 
-// 🔐 Seguridad y rendimiento
+// 🌍 Verifica entorno
+console.log("🌍 CORS_ORIGIN:", process.env.CORS_ORIGIN);
+console.log("📡 DATABASE_URL:", process.env.DATABASE_URL ? "✅ OK" : "❌ FALTA");
+
+// 🔐 Seguridad y performance
 app.use(compression());
 app.use(morgan("dev"));
 app.use(helmet());
@@ -27,20 +28,14 @@ app.use(hpp());
 app.use(expressSanitizer());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/api/admin", adminRoutes);
-
-// 🛡️ Rate limit
 app.use(slowDown({ windowMs: 15 * 60 * 1000, delayAfter: 50, delayMs: 500 }));
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 
-// ✅ Dominios permitidos (limpia comillas y espacios)
+// ✅ CORS dinámico
 const allowedOrigins = (process.env.CORS_ORIGIN || "")
   .split(",")
   .map(origin => origin.trim().replace(/^"|"$/g, ""));
 
-console.log("✅ Dominios permitidos:", allowedOrigins);
-
-// ✅ CORS dinámico
 const corsOptions = {
   origin: function (origin, callback) {
     if (!origin || allowedOrigins.includes(origin)) {
@@ -63,7 +58,7 @@ app.get("/", (req, res) => {
   res.send("🚀 API activa en Railway");
 });
 
-// 📩 Ruta de contacto
+// 📩 Ruta para guardar mensaje
 app.post("/api/contact", async (req, res) => {
   try {
     let { name, email, message } = req.body;
@@ -87,7 +82,6 @@ app.post("/api/contact", async (req, res) => {
       data: { name, email, message },
     });
 
-    console.log("📩 Guardado:", saved);
     res.status(201).json({ success: true, message: "Mensaje enviado con éxito" });
   } catch (err) {
     console.error("❌ Error:", err);
@@ -95,32 +89,8 @@ app.post("/api/contact", async (req, res) => {
   }
 });
 
-// ❌ Eliminar mensaje por ID
-app.delete("/api/messages/:id", async (req, res) => {
-  const auth = req.headers.authorization;
-  const token = auth?.split(" ")[1];
-
-  if (!token) return res.status(401).json({ error: "Falta token" });
-
-  try {
-    const decoded = require("jsonwebtoken").verify(token, process.env.JWT_SECRET);
-    const messageId = parseInt(req.params.id);
-
-    const deleted = await prisma.contactMessage.delete({
-      where: { id: messageId },
-    });
-
-    res.status(200).json({ success: true, deleted });
-  } catch (err) {
-    console.error("❌ Error al eliminar mensaje:", err);
-    res.status(401).json({ error: "Token inválido o ID no encontrado" });
-  }
-});
-
-// Añade al final de tu server.js, antes del 404
-const jwt = require("jsonwebtoken");
-
-function authMiddleware(req, res, next) {
+// 🔐 Middleware de autenticación
+function auth(req, res, next) {
   const token = req.headers.authorization?.split(" ")[1];
   if (!token) return res.status(401).json({ error: "Token requerido" });
 
@@ -133,15 +103,21 @@ function authMiddleware(req, res, next) {
   }
 }
 
-app.get("/api/messages", authMiddleware, async (req, res) => {
-  const messages = await prisma.contactMessage.findMany({
-    orderBy: { createdAt: "desc" },
-  });
-  res.json(messages);
+// 🔐 Ruta para login
+app.post("/api/auth", (req, res) => {
+  const { user, pass } = req.body;
+
+  if (user === process.env.ADMIN_USER && pass === process.env.ADMIN_PASS) {
+    const token = jwt.sign({ user }, process.env.JWT_SECRET, {
+      expiresIn: "2h",
+    });
+    return res.status(200).json({ token });
+  }
+
+  res.status(401).json({ error: "Credenciales incorrectas" });
 });
 
-const auth = require("./middleware/auth");
-
+// 📬 Obtener mensajes (solo admin)
 app.get("/api/messages", auth, async (req, res) => {
   try {
     const messages = await prisma.contactMessage.findMany({
@@ -151,6 +127,22 @@ app.get("/api/messages", auth, async (req, res) => {
   } catch (err) {
     console.error("❌ Error al obtener mensajes:", err);
     res.status(500).json({ error: "Error al obtener mensajes" });
+  }
+});
+
+// ❌ Eliminar mensaje por ID (admin)
+app.delete("/api/messages/:id", auth, async (req, res) => {
+  try {
+    const messageId = parseInt(req.params.id);
+
+    const deleted = await prisma.contactMessage.delete({
+      where: { id: messageId },
+    });
+
+    res.status(200).json({ success: true, deleted });
+  } catch (err) {
+    console.error("❌ Error al eliminar mensaje:", err);
+    res.status(401).json({ error: "Token inválido o ID no encontrado" });
   }
 });
 
