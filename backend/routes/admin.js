@@ -1,36 +1,29 @@
 const express = require("express");
 const jwt = require("jsonwebtoken");
-const auth = require("../middlewares/authMiddleware");
-const { PrismaClient } = require("@prisma/client");
 
 const router = express.Router();
-const prisma = new PrismaClient();
 
-// Ruta de login (devuelve el token)
-router.post("/login", (req, res) => {
-  const { email, password } = req.body;
+// 🔐 Ruta para login de administrador
+router.post("/auth", (req, res) => {
+  const { user, pass } = req.body;
 
-  if (
-    email === process.env.ADMIN_EMAIL &&
-    password === process.env.ADMIN_PASSWORD
-  ) {
-    const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "1h" });
-    res.json({ token });
-  } else {
-    res.status(401).json({ error: "Credenciales inválidas" });
+  if (!user || !pass) {
+    return res.status(400).json({ error: "Faltan credenciales" });
   }
-});
 
-// Ruta protegida para ver los mensajes
-router.get("/messages", auth, async (req, res) => {
-  try {
-    const messages = await prisma.contactMessage.findMany({
-      orderBy: { createdAt: "desc" },
+  const ADMIN_USER = process.env.ADMIN_USER;
+  const ADMIN_PASS = process.env.ADMIN_PASS;
+  const JWT_SECRET = process.env.JWT_SECRET;
+
+  if (user === ADMIN_USER && pass === ADMIN_PASS) {
+    const token = jwt.sign({ user }, JWT_SECRET, {
+      expiresIn: "2h",
     });
-    res.json(messages);
-  } catch (err) {
-    res.status(500).json({ error: "Error al obtener mensajes" });
+
+    return res.json({ token });
   }
+
+  return res.status(401).json({ error: "Credenciales inválidas" });
 });
 
 module.exports = router;
