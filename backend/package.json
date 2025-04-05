@@ -1,32 +1,14 @@
 {
-  "name": "backend",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "landing-gsap-three",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-  "build": "npx prisma generate",
-  "start": "node server.js"
-},
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
   "dependencies": {
-<<<<<<< Updated upstream
-    "@prisma/client": "^6.5.0",
-    "compression": "^1.8.0",
-    "cors": "^2.8.5",
-    "dotenv": "^16.4.7",
-    "express": "^4.21.2",
-    "express-rate-limit": "^7.5.0",
-    "express-sanitizer": "^1.0.6",
-    "express-slow-down": "^2.0.3",
-    "helmet": "^8.1.0",
-    "hpp": "^0.2.3",
-    "morgan": "^1.10.0",
-    "nodemailer": "^6.10.0",
-    "xss-clean": "^0.1.4"
-=======
     "@react-three/drei": "^10.0.4",
     "@react-three/fiber": "^9.1.0",
     "autoprefixer": "^10.4.21",
@@ -43,6 +25,5 @@
     "@eslint/eslintrc": "^3",
     "eslint": "^9",
     "eslint-config-next": "15.2.2"
->>>>>>> Stashed changes
   }
 }
