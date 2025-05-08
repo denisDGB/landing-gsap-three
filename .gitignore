@@ -1,4 +1,13 @@
+# Next.js
+.next/
+out/
 node_modules/
-.env
-dist/
-.prisma/
+.env*
+.vercel/
+.vscode/
+*.log
+*.sqlite
+
+# OS files
+.DS_Store
+Thumbs.db
