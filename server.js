@@ -28,7 +28,11 @@ app.use(hpp());
 app.use(expressSanitizer());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(slowDown({ windowMs: 15 * 60 * 1000, delayAfter: 50, delayMs: 500 }));
+app.use(slowDown({
+  windowMs: 15 * 60 * 1000,
+  delayAfter: 50,
+  delayMs: () => 500 // nueva forma recomendada
+}));
 app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 
 // ✅ CORS dinámico
@@ -103,20 +107,6 @@ function auth(req, res, next) {
   }
 }
 
-// 🔐 Ruta para login
-app.post("/api/auth", (req, res) => {
-  const { user, pass } = req.body;
-
-  if (user === process.env.ADMIN_USER && pass === process.env.ADMIN_PASS) {
-    const token = jwt.sign({ user }, process.env.JWT_SECRET, {
-      expiresIn: "2h",
-    });
-    return res.status(200).json({ token });
-  }
-
-  res.status(401).json({ error: "Credenciales incorrectas" });
-});
-
 // 📬 Obtener mensajes (solo admin)
 app.get("/api/messages", auth, async (req, res) => {
   try {
@@ -145,6 +135,15 @@ app.delete("/api/messages/:id", auth, async (req, res) => {
     res.status(401).json({ error: "Token inválido o ID no encontrado" });
   }
 });
+
+// 🧩 Montaje de rutas separadas
+const authRoutes = require("./routes/auth");
+const contactRoutes = require("./routes/contact");
+const adminRoutes = require("./routes/admin"); // ✅ Solo si tienes admin.js
+
+app.use("/api", authRoutes);       // Maneja login con JWT
+app.use("/api/contact", contactRoutes); // Formulario de contacto
+app.use("/api/admin", adminRoutes);     // Panel admin (opcional)
 
 // 404
 app.all("*", (req, res) => {

@@ -1,10 +1,9 @@
-// La ruta para autenticar con JWT
 const express = require("express");
 const jwt = require("jsonwebtoken");
 const router = express.Router();
 
-const ADMIN_USER = process.env.ADMIN_USER;
-const ADMIN_PASS = process.env.ADMIN_PASS;
+const ADMIN_USER = process.env.ADMIN_EMAIL;
+const ADMIN_PASS = process.env.ADMIN_PASSWORD;
 const JWT_SECRET = process.env.JWT_SECRET;
 
 router.post("/login", (req, res) => {
