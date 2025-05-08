@@ -13,6 +13,7 @@ const jwt = require("jsonwebtoken");
 require("dotenv").config();
 
 const app = express();
+app.set("trust proxy", 1);
 const prisma = new PrismaClient();
 
 // 🌍 Verifica entorno
