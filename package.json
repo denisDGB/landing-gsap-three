@@ -3,12 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-  "dev": "next dev --turbopack",
-  "prisma:generate": "prisma generate",
-  "prisma:migrate": "prisma migrate deploy",
-  "build": "npm run prisma:generate && npm run prisma:migrate && next build",
-  "start": "node server.js",
-  "lint": "next lint"
+    "dev": "next dev --turbopack",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate deploy",
+    "build": "npm run prisma:generate && npm run prisma:migrate && next build",
+    "start": "node server.js",
+    "lint": "next lint"
   },
   "dependencies": {
     "@prisma/client": "^6.5.0",
@@ -37,9 +37,9 @@
     "xss-clean": "^0.1.4"
   },
   "devDependencies": {
-  "@eslint/eslintrc": "^3",
-  "eslint": "^9",
-  "eslint-config-next": "15.2.2",
-  "prisma": "^6.5.0"
+    "@eslint/eslintrc": "^3",
+    "eslint": "^9",
+    "eslint-config-next": "15.2.2",
+    "prisma": "^6.7.0"
   }
 }
