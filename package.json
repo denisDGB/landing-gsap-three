@@ -37,8 +37,9 @@
     "xss-clean": "^0.1.4"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
-    "eslint": "^9",
-    "eslint-config-next": "15.2.2"
+  "@eslint/eslintrc": "^3",
+  "eslint": "^9",
+  "eslint-config-next": "15.2.2",
+  "prisma": "^6.5.0"
   }
 }
