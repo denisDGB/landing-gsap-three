@@ -10,23 +10,22 @@ export async function GET() {
     },
   ];
 
-  return new Response(
-    `<?xml version="1.0" encoding="UTF-8"?>
-    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-      ${urls
-        .map(
-          ({ url, lastModified }) => `
-        <url>
-          <loc>${url}</loc>
-          <lastmod>${lastModified}</lastmod>
-        </url>`
-        )
-        .join("")}
-    </urlset>`,
-    {
-      headers: {
-        "Content-Type": "application/xml",
-      },
-    }
-  );
+  const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  ${urls
+    .map(
+      (url) => `
+  <url>
+    <loc>${url.url}</loc>
+    <lastmod>${url.lastModified}</lastmod>
+  </url>`
+    )
+    .join("")}
+</urlset>`;
+
+  return new Response(sitemap, {
+    headers: {
+      "Content-Type": "application/xml",
+    },
+  });
 }
