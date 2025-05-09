@@ -138,11 +138,9 @@ app.delete("/api/messages/:id", auth, async (req, res) => {
 });
 
 // 🧩 Montaje de rutas separadas
-const authRoutes = require("./routes/auth");
 const contactRoutes = require("./routes/contact");
 const adminRoutes = require("./routes/admin"); // ✅ Solo si tienes admin.js
 
-app.use("/api", authRoutes);       // Maneja login con JWT
 app.use("/api/contact", contactRoutes); // Formulario de contacto
 app.use("/api/admin", adminRoutes);     // Panel admin (opcional)
 
