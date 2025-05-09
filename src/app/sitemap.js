@@ -1,14 +1,32 @@
-export default function sitemap() {
-    return [
-      {
-        url: "https://tudominio.com/",
-        lastModified: new Date().toISOString(),
+export async function GET() {
+  const urls = [
+    {
+      url: "https://denis-dev.vercel.app/",
+      lastModified: new Date().toISOString(),
+    },
+    {
+      url: "https://denis-dev.vercel.app/contacto",
+      lastModified: new Date().toISOString(),
+    },
+  ];
+
+  return new Response(
+    `<?xml version="1.0" encoding="UTF-8"?>
+    <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+      ${urls
+        .map(
+          ({ url, lastModified }) => `
+        <url>
+          <loc>${url}</loc>
+          <lastmod>${lastModified}</lastmod>
+        </url>`
+        )
+        .join("")}
+    </urlset>`,
+    {
+      headers: {
+        "Content-Type": "application/xml",
       },
-      {
-        url: "https://tudominio.com/contacto",
-        lastModified: new Date().toISOString(),
-      },
-      // Agrega más URLs según tus páginas
-    ];
-  }
-  
+    }
+  );
+}
