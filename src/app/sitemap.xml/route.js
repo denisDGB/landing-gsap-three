@@ -2,12 +2,12 @@ export async function GET() {
     const baseUrl = "https://denis-dev.vercel.app";
   
     const urls = [
-      "", // Home
-      "/contacto",
-      "/proyectos",
-      "/servicios",
-      "/testimonios",
-    ];
+        "/", // ← ✅ Ruta válida para el home
+        "/contacto",
+        "/proyectos",
+        "/servicios",
+        "/testimonios",
+      ];      
   
     const sitemap = `<?xml version="1.0" encoding="UTF-8"?>
     <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
