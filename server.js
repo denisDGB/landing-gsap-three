@@ -39,7 +39,8 @@ app.use(rateLimit({ windowMs: 15 * 60 * 1000, max: 100 }));
 // ✅ CORS dinámico
 const allowedOrigins = (process.env.CORS_ORIGIN || "")
   .split(",")
-  .map(origin => origin.trim().replace(/^"|"$/g, ""));
+  .map(origin => origin.trim().replace(/^"|"$/g, ""))
+  .filter(Boolean); // 🔥 Evita cadenas vacías que rompen CORS y rutas
 
 const corsOptions = {
   origin: function (origin, callback) {
