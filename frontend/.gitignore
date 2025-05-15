@@ -1,13 +1,6 @@
 # Next.js
-.next/
-out/
-node_modules/
-.env*
-.vercel/
-.vscode/
+.next
+out
+node_modules
+.env.local
 *.log
-*.sqlite
-
-# OS files
-.DS_Store
-Thumbs.db
