@@ -117,9 +117,10 @@ export default function About() {
                     <div className="pt-6">
                       <a
                         href="#contact"
-                        className="inline-block px-8 py-4 bg-white text-black rounded-full text-lg font-semibold hover:bg-white/90 transition-all duration-300 hover:scale-105"
+                        className="group relative inline-block px-8 py-4 bg-white text-black rounded-full text-lg font-semibold overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-blue-500/20 hover:scale-105"
                       >
-                        {t.about.cta}
+                        <span className="relative z-10 group-hover:text-white transition-colors duration-300">{t.about.cta}</span>
+                        <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                       </a>
                     </div>
           </div>

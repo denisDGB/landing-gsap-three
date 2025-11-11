@@ -113,8 +113,11 @@ export const translations = {
         emailPlaceholder: "tu@email.com",
         message: "Mensaje",
         messagePlaceholder: "Cuéntame sobre tu proyecto...",
-        submit: "Enviar por WhatsApp",
-        sending: "Abriendo WhatsApp..."
+        submit: "Enviar mensaje",
+        sending: "Enviando...",
+        success: "¡Mensaje enviado con éxito! Te contactaré pronto 🚀",
+        error: "Por favor completa todos los campos",
+        errorSending: "Hubo un error al enviar el mensaje. Intenta nuevamente.",
       },
       footer: "© 2025 Denis. Todos los derechos reservados."
     },
@@ -235,8 +238,11 @@ export const translations = {
         emailPlaceholder: "your@email.com",
         message: "Message",
         messagePlaceholder: "Tell me about your project...",
-        submit: "Send via WhatsApp",
-        sending: "Opening WhatsApp..."
+        submit: "Send message",
+        sending: "Sending...",
+        success: "Message sent successfully! I'll contact you soon 🚀",
+        error: "Please fill in all fields",
+        errorSending: "There was an error sending the message. Please try again.",
       },
       footer: "© 2025 Denis. All rights reserved."
     },
