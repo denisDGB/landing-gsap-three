@@ -5,13 +5,14 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { 
   SiReact, SiNextdotjs, SiTypescript, SiTailwindcss,
-  SiWordpress, SiNodedotjs, SiJava, SiPython, 
+  SiWordpress, SiNodedotjs, SiPython, 
   SiPhp, SiJavascript, SiMysql, SiPostgresql, SiMariadb,
-  SiMicrosoftazure, SiDocker, SiJenkins, SiVercel,
-  SiGit, SiGithub, SiPostman, SiVisualstudiocode, SiVisualstudio,
+  SiDocker, SiJenkins, SiVercel,
+  SiGit, SiGithub, SiPostman,
   SiRemix, SiFigma
 } from "react-icons/si";
-import { FaDatabase, FaMobileAlt, FaSearch, FaPalette, FaCode, FaCube, FaTrain, FaServer } from "react-icons/fa";
+import { FaDatabase, FaMobileAlt, FaSearch, FaPalette, FaCode, FaCube, FaTrain, FaServer, FaJava, FaMicrosoft } from "react-icons/fa";
+import { VscCode, VscAzure } from "react-icons/vsc";
 import { MdDesignServices } from "react-icons/md";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -79,7 +80,7 @@ export default function Skills() {
       icon: "⚙️",
       skills: [
         { name: "Node.js", Icon: SiNodedotjs, color: "#339933" },
-        { name: "Java", Icon: SiJava, color: "#007396" },
+        { name: "Java", Icon: FaJava, color: "#007396" },
         { name: "Python", Icon: SiPython, color: "#3776AB" },
         { name: "PHP", Icon: SiPhp, color: "#777BB4" },
         { name: "JavaScript", Icon: SiJavascript, color: "#F7DF1E" },
@@ -93,14 +94,14 @@ export default function Skills() {
         { name: "MySQL", Icon: SiMysql, color: "#4479A1" },
         { name: "PostgreSQL", Icon: SiPostgresql, color: "#336791" },
         { name: "MariaDB", Icon: SiMariadb, color: "#003545" },
-        { name: "Azure SQL", Icon: SiMicrosoftazure, color: "#0078D4" }
+        { name: "Azure SQL", Icon: VscAzure, color: "#0078D4" }
       ]
     },
     {
       title: "Cloud & Deploy",
       icon: "☁️",
       skills: [
-        { name: "Azure", Icon: SiMicrosoftazure, color: "#0078D4" },
+        { name: "Azure", Icon: VscAzure, color: "#0078D4" },
         { name: "Docker", Icon: SiDocker, color: "#2496ED" },
         { name: "Jenkins", Icon: SiJenkins, color: "#D24939" },
         { name: "Vercel", Icon: SiVercel, color: "#000000" },
@@ -115,8 +116,8 @@ export default function Skills() {
         { name: "Git", Icon: SiGit, color: "#F05032" },
         { name: "GitHub", Icon: SiGithub, color: "#181717" },
         { name: "Postman", Icon: SiPostman, color: "#FF6C37" },
-        { name: "VS Code", Icon: SiVisualstudiocode, color: "#007ACC" },
-        { name: "Visual Studio", Icon: SiVisualstudio, color: "#5C2D91" },
+        { name: "VS Code", Icon: VscCode, color: "#007ACC" },
+        { name: "Visual Studio", Icon: FaMicrosoft, color: "#5C2D91" },
         { name: "Remix", Icon: SiRemix, color: "#000000" }
       ]
     },
