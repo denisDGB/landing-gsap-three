@@ -1,14 +1,14 @@
-# 🚀 Freelancer Landing Page
+# 🚀 Portfolio Full Stack Developer
 
-Una landing page moderna y optimizada para freelancers, construida con **Next.js, Tailwind CSS, Express.js y PostgreSQL**. Diseñada para mostrar portafolios, servicios y facilitar el contacto con clientes.
+Portfolio profesional moderno para desarrollador Full Stack, construido con **Next.js, Tailwind CSS, GSAP y Three.js**. Diseñado para mostrar habilidades, proyectos y servicios con animaciones fluidas y efectos 3D interactivos.
 
 ## 🌟 Características
-- 🔥 **Frontend:** Next.js con Tailwind CSS para diseño rápido y responsivo.
-- ⚡ **Backend:** Express.js con PostgreSQL y Prisma ORM.
-- 🧠 **IA:** OpenAI GPT-4 + Langchain para generar contenido dinámico.
-- 📈 **SEO:** Meta tags dinámicas, Open Graph y Google Analytics.
-- 📩 **Formulario de contacto:** Almacena mensajes en PostgreSQL.
-- 🌍 **Despliegue:** Frontend en Vercel y Backend en Railway.
+- 🔥 **Frontend:** Next.js 14 con Tailwind CSS para diseño rápido y responsivo.
+- ✨ **Animaciones:** GSAP con ScrollTrigger para transiciones suaves.
+- 🎨 **3D Interactivo:** Esfera 3D con Three.js y React Three Fiber.
+- 📱 **Contacto:** Formulario integrado con WhatsApp.
+- 🧭 **Navegación:** Navbar dinámico con indicador de sección activa.
+- 🚀 **Despliegue:** Vercel con auto-deploy desde GitHub.
 
 ---
 
@@ -16,73 +16,70 @@ Una landing page moderna y optimizada para freelancers, construida con **Next.js
 
 ### 1️⃣ Clonar el repositorio
 ```sh
- git clone https://github.com/tu-usuario/freelancer-landing.git
- cd freelancer-landing
+git clone https://github.com/denisDGB/landing-gsap-three.git
+cd landing-gsap-three
 ```
 
-### 2️⃣ Configurar el Backend
+### 2️⃣ Instalar dependencias
 ```sh
- cd backend
- npm install
- cp .env.example .env # Configurar variables de entorno
- npm run dev
+cd frontend
+npm install
 ```
 
-### 3️⃣ Configurar el Frontend
+### 3️⃣ Ejecutar en desarrollo
 ```sh
- cd ../frontend
- npm install
- cp .env.example .env # Configurar variables de entorno
- npm run dev
+npm run dev
 ```
+
+Abre [http://localhost:3000](http://localhost:3000) en tu navegador.
 
 ---
 
 ## 📂 Estructura del Proyecto
 ```
-freelancer-landing/
-│── backend/          # Servidor Express.js con PostgreSQL y Prisma
-│── frontend/         # Aplicación Next.js con Tailwind CSS
-│── prisma/           # Esquema y migraciones de base de datos
-│── .env.example      # Variables de entorno de ejemplo
-│── README.md         # Documentación del proyecto
+landing-gsap-three/
+│── frontend/
+│   │── src/
+│   │   │── app/              # Pages y layout de Next.js
+│   │   │── components/       # Hero, About, Services, Skills, Projects, Contact
+│   │── public/               # Imágenes y assets estáticos
+│   │── package.json
+│── README.md
 ```
 
 ---
 
-## ⚙️ Variables de Entorno
-Crea un archivo `.env` en `backend/` y `frontend/` con las siguientes variables:
-
-### Backend (`backend/.env`)
-```env
-DATABASE_URL=postgresql://usuario:contraseña@localhost:5432/freelancer_db
-OPENAI_API_KEY=tu_clave_openai
-```
-
-### Frontend (`frontend/.env`)
-```env
-NEXT_PUBLIC_API_URL=http://localhost:5000
-```
+## ⚙️ Tecnologías
+- **Next.js 14** - Framework React
+- **Tailwind CSS** - Estilos utilitarios
+- **GSAP** - Animaciones avanzadas
+- **Three.js** - Gráficos 3D
+- **React Three Fiber** - Three.js en React
+- **React Icons** - Iconos SVG
 
 ---
 
 ## 🚀 Despliegue
-### **Backend en Railway**
-```sh
- railway up
-```
 
-### **Frontend en Vercel**
+### **Vercel (Recomendado)**
+1. Conecta tu repositorio de GitHub con Vercel
+2. Configura **Root Directory** como `frontend`
+3. Deploy automático en cada push a `main`
+
+O usando Vercel CLI:
 ```sh
- vercel deploy
+cd frontend
+vercel deploy
 ```
 
 ---
 
 ## 📬 Contacto
-Si tienes dudas, contáctame en [tu-email@correo.com](mailto:tu-email@correo.com) o visita mi portafolio [aquí](https://tuportafolio.com).
+- **Email:** denis17.hnd@gmail.com
+- **LinkedIn:** [/in/denisgomezhn](https://www.linkedin.com/in/denisgomezhn)
+- **GitHub:** [@denisDGB](https://github.com/denisDGB)
 
 ---
 
 ### 📜 Licencia
-MIT License. ¡Úsalo libremente y mejora tu presencia en línea! 🚀
+MIT License. ¡Úsalo libremente! 🚀
