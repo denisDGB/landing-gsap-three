@@ -1,12 +1,25 @@
 import "./globals.css"; // Importa Tailwind CSS
 import Script from "next/script"; // Para Google Analytics
+import { Space_Grotesk, Inter } from "next/font/google";
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
+  weight: ["300", "400", "500", "600", "700"],
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  variable: "--font-inter",
+  weight: ["300", "400", "500", "600", "700"],
+});
 
 export const metadata = {
   metadataBase: new URL("https://tudominio.com"), // 🔹 Reemplázalo con tu dominio real
-  title: "Landing Animada con GSAP y Three.js",
+  title: "Denis - Frontend Developer & Motion Designer",
   description: "Una landing page interactiva con animaciones avanzadas y gráficos en 3D.",
   keywords: "landing page, animaciones web, GSAP, Three.js, desarrollo web",
-  author: "Tu Nombre",
+  author: "Denis",
   openGraph: {
     title: "Landing Animada con GSAP y Three.js",
     description: "Una landing page interactiva con animaciones avanzadas y gráficos en 3D.",
@@ -32,7 +45,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="es">
+    <html lang="es" className={`${spaceGrotesk.variable} ${inter.variable}`}>
       <head>
         {/* Google Analytics */}
         <Script
@@ -48,7 +61,7 @@ export default function RootLayout({ children }) {
           `}
         </Script>
       </head>
-      <body className="bg-black text-white">{children}</body>
+      <body className="bg-black text-white antialiased">{children}</body>
     </html>
   );
 }
