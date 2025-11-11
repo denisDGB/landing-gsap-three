@@ -1,31 +1,51 @@
 "use client";
 
+import { useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+import Navbar from "../components/Navbar";
 import Hero from "../components/Hero";
 import About from "../components/About";
-import Projects from "../components/Projects";
 import Services from "../components/Services";
-import Testimonials from "../components/Testimonials";
+import Skills from "../components/Skills";
+import Projects from "../components/Projects";
 import Contact from "../components/Contact";
-import Background3D from "../components/Background3D";
+import ScrollToTop from "../components/ScrollToTop";
 
-gsap.registerPlugin(ScrollTrigger);
-
-console.log("API URL desde el servidor:", process.env.NEXT_PUBLIC_API_URL);
+gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 
 export default function Home() {
+  useEffect(() => {
+    // Configuración global de ScrollTrigger
+    ScrollTrigger.config({
+      autoRefreshEvents: "visibilitychange,DOMContentLoaded,load"
+    });
+
+    // Refresh ScrollTrigger cuando la página está lista
+    ScrollTrigger.refresh();
+
+    return () => {
+      ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+    };
+  }, []);
+
   return (
-    <div className="relative w-full">
-      <Background3D /> {/* 🔥 Aseguramos que el fondo se carga antes que el contenido */}
-      <Hero />
-      <About />
-      <Projects />
-      <Services />
-      <Testimonials />
-      <Contact />
-      <p className="text-center text-white mt-4">API URL: {process.env.NEXT_PUBLIC_API_URL}</p>
-    </div>
+    <>
+      <Navbar />
+      
+      <main className="relative w-full overflow-x-hidden">
+        <Hero />
+        <About />
+        <Services />
+        <Skills />
+        <Projects />
+        <Contact />
+      </main>
+
+      {/* Botón scroll to top */}
+      <ScrollToTop />
+    </>
   );
 }
 
