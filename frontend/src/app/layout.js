@@ -16,7 +16,7 @@ const inter = Inter({
 
 export const metadata = {
   metadataBase: new URL("https://tudominio.com"), // 🔹 Reemplázalo con tu dominio real
-  title: "Denis - Frontend Developer & Motion Designer",
+  title: "Denis - Full Stack Developer",
   description: "Una landing page interactiva con animaciones avanzadas y gráficos en 3D.",
   keywords: "landing page, animaciones web, GSAP, Three.js, desarrollo web",
   author: "Denis",
