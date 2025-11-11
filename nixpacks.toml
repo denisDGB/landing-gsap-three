@@ -1,8 +1,0 @@
-[phases.setup]
-nixPkgs = ['nodejs', 'openssl', 'postgresql']
-
-[phases.build]
-cmds = ['npm install', 'npm run build']
-
-[start]
-cmd = 'npm run start'
