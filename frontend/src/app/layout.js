@@ -1,6 +1,7 @@
 import "./globals.css"; // Importa Tailwind CSS
 import Script from "next/script"; // Para Google Analytics
 import { Space_Grotesk, Inter } from "next/font/google";
+import ClientLayout from "../components/ClientLayout";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -61,7 +62,9 @@ export default function RootLayout({ children }) {
           `}
         </Script>
       </head>
-      <body className="bg-black text-white antialiased">{children}</body>
+      <body className="bg-black text-white antialiased">
+        <ClientLayout>{children}</ClientLayout>
+      </body>
     </html>
   );
 }

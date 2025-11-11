@@ -4,10 +4,12 @@ import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Background3D from "./Background3D";
+import { useLanguage } from "../contexts/LanguageContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Hero() {
+  const { t } = useLanguage();
   const containerRef = useRef(null);
   const titleRef = useRef(null);
   const descRef = useRef(null);
@@ -66,9 +68,9 @@ export default function Hero() {
           ref={titleRef} 
           className="text-5xl md:text-7xl lg:text-8xl font-bold mb-6 leading-tight"
         >
-          Full Stack Developer
+          {t.hero.title}
           <br />
-          <span className="text-gradient-blue">& Software Engineer</span>
+          <span className="text-gradient-blue">{t.hero.subtitle}</span>
         </h1>
 
         {/* Descripción */}
@@ -76,10 +78,10 @@ export default function Hero() {
           ref={descRef} 
           className="text-lg md:text-xl lg:text-2xl max-w-2xl mx-auto text-gray-400 mb-12 leading-relaxed"
         >
-          Desarrollando soluciones completas desde el 
-          <span className="text-white font-semibold"> frontend hasta el backend</span>, con 
-          <span className="text-white font-semibold"> bases de datos</span> y 
-          <span className="text-white font-semibold"> deploy en la nube</span>
+          {t.hero.description}{" "}
+          <span className="text-white font-semibold">{t.hero.descriptionBold1}</span>{t.hero.descriptionMiddle}{" "}
+          <span className="text-white font-semibold">{t.hero.descriptionBold2}</span> {t.hero.descriptionEnd}{" "}
+          <span className="text-white font-semibold">{t.hero.descriptionBold3}</span>
         </p>
 
         {/* Botones */}
@@ -88,7 +90,7 @@ export default function Hero() {
             href="#projects"
             className="group relative px-8 py-4 bg-white text-black rounded-full text-lg font-semibold overflow-hidden transition-all duration-300 hover:shadow-2xl hover:shadow-white/20"
           >
-            <span className="relative z-10">Ver mi trabajo</span>
+            <span className="relative z-10">{t.hero.cta1}</span>
             <div className="absolute inset-0 bg-gradient-to-r from-blue-500 to-purple-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
           </a>
           
@@ -96,7 +98,7 @@ export default function Hero() {
             href="#contact"
             className="px-8 py-4 bg-white/5 backdrop-blur-sm text-white rounded-full text-lg font-semibold border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300"
           >
-            Contactar
+            {t.hero.cta2}
           </a>
         </div>
       </div>

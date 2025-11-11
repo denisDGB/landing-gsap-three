@@ -3,10 +3,12 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useLanguage } from "../contexts/LanguageContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function About() {
+  const { t } = useLanguage();
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
   const imageRef = useRef(null);
@@ -74,7 +76,7 @@ export default function About() {
           ref={titleRef}
           className="text-4xl md:text-6xl font-bold mb-16 text-center"
         >
-          Sobre <span className="text-gradient-blue">Mí</span>
+          {t.about.title} <span className="text-gradient-blue">{t.about.titleHighlight}</span>
         </h2>
 
         <div className="grid md:grid-cols-2 gap-12 items-center">
@@ -117,15 +119,15 @@ export default function About() {
               las mejores soluciones.
             </p>
 
-            {/* CTA */}
-            <div className="pt-6">
-              <a
-                href="#contact"
-                className="inline-block px-8 py-4 bg-white text-black rounded-full text-lg font-semibold hover:bg-white/90 transition-all duration-300 hover:scale-105"
-              >
-                Trabajemos juntos →
-              </a>
-            </div>
+                    {/* CTA */}
+                    <div className="pt-6">
+                      <a
+                        href="#contact"
+                        className="inline-block px-8 py-4 bg-white text-black rounded-full text-lg font-semibold hover:bg-white/90 transition-all duration-300 hover:scale-105"
+                      >
+                        {t.about.cta}
+                      </a>
+                    </div>
           </div>
         </div>
       </div>

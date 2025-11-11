@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useLanguage } from "../contexts/LanguageContext";
 
 export default function Navbar() {
+  const { language, changeLanguage, t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("hero");
 
@@ -46,12 +48,12 @@ export default function Navbar() {
   }, []);
 
   const navLinks = [
-    { name: "Inicio", href: "#hero", id: "hero" },
-    { name: "Sobre Mí", href: "#about", id: "about" },
-    { name: "Servicios", href: "#services", id: "services" },
-    { name: "Stack", href: "#skills", id: "skills" },
-    { name: "Proyectos", href: "#projects", id: "projects" },
-    { name: "Contacto", href: "#contact", id: "contact" },
+    { name: t.nav.home, href: "#hero", id: "hero" },
+    { name: t.nav.about, href: "#about", id: "about" },
+    { name: t.nav.services, href: "#services", id: "services" },
+    { name: t.nav.stack, href: "#skills", id: "skills" },
+    { name: t.nav.projects, href: "#projects", id: "projects" },
+    { name: t.nav.contact, href: "#contact", id: "contact" },
   ];
 
   return (
@@ -110,6 +112,18 @@ export default function Navbar() {
               </svg>
               <span className="hidden lg:inline">GitHub</span>
             </a>
+
+            {/* Language Switcher */}
+            <button
+              onClick={() => changeLanguage(language === "es" ? "en" : "es")}
+              className="flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm text-white rounded-full font-semibold border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 hover:scale-105"
+              aria-label="Change language"
+            >
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+              </svg>
+              <span className="text-sm font-bold">{language.toUpperCase()}</span>
+            </button>
           </div>
 
           {/* Menú móvil - Botón hamburguesa */}
@@ -175,6 +189,18 @@ export default function Navbar() {
             </svg>
             GitHub
           </a>
+
+          {/* Language Switcher en móvil */}
+          <button
+            onClick={() => changeLanguage(language === "es" ? "en" : "es")}
+            className="flex items-center gap-2 px-4 py-2 bg-white/5 backdrop-blur-sm text-white rounded-full font-semibold border border-white/10 hover:bg-white/10 hover:border-white/20 transition-all duration-300 w-full justify-center"
+            aria-label="Change language"
+          >
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+            </svg>
+            <span className="text-sm font-bold">{language === "es" ? "Español" : "English"}</span>
+          </button>
         </div>
       </div>
     </nav>
