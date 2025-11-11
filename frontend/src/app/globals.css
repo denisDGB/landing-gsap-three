@@ -2,21 +2,78 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Tipografía y colores globales */
-body {
-  font-family: 'Inter', sans-serif;
-  background-color: #0a0a0a;
-  color: #ffffff;
+@layer base {
+  :root {
+    --font-space-grotesk: 'Space Grotesk', sans-serif;
+    --font-inter: 'Inter', sans-serif;
+  }
+
+  body {
+    font-family: var(--font-inter);
+    background-color: #0a0a0a;
+    color: #ffffff;
+    overflow-x: hidden;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-space-grotesk);
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
 }
 
-/* 🔴 Comenta o elimina el fondo degradado */
-/*
-.bg-gradient {
-  background: linear-gradient(180deg, rgba(10, 10, 10, 1) 0%, rgba(30, 30, 30, 1) 100%);
+@layer utilities {
+  .text-gradient {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-blue {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 }
-*/
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
 
 /* Suavizar transiciones */
 button, a, .project-card, .testimonial-card {
-  transition: all 0.3s ease-in-out;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Animación del borde de las cards */
+.animate-border-draw {
+  opacity: 0;
+  stroke-dashoffset: 1500;
+  transition: stroke-dashoffset 0.8s ease-in-out, opacity 0.3s ease-in-out;
+}
+
+.group:hover .animate-border-draw {
+  opacity: 1;
+  stroke-dashoffset: 0;
 }
