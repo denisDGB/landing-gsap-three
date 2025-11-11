@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useLanguage } from "../contexts/LanguageContext";
 import { 
   SiReact, SiNextdotjs, SiTypescript, SiTailwindcss,
   SiWordpress, SiNodedotjs, SiPython, 
@@ -18,6 +19,7 @@ import { MdDesignServices } from "react-icons/md";
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Skills() {
+  const { t } = useLanguage();
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
   const categoriesRef = useRef([]);
@@ -63,7 +65,7 @@ export default function Skills() {
 
   const skillCategories = [
     {
-      title: "Frontend",
+      title: t.skills.categories.frontend,
       icon: "💻",
       skills: [
         { name: "React.js", Icon: SiReact, color: "#61DAFB" },
@@ -76,7 +78,7 @@ export default function Skills() {
       ]
     },
     {
-      title: "Backend",
+      title: t.skills.categories.backend,
       icon: "⚙️",
       skills: [
         { name: "Node.js", Icon: SiNodedotjs, color: "#339933" },
@@ -88,7 +90,7 @@ export default function Skills() {
       ]
     },
     {
-      title: "Bases de Datos",
+      title: t.skills.categories.databases,
       icon: "🗄️",
       skills: [
         { name: "MySQL", Icon: SiMysql, color: "#4479A1" },
@@ -98,7 +100,7 @@ export default function Skills() {
       ]
     },
     {
-      title: "Cloud & Deploy",
+      title: t.skills.categories.cloud,
       icon: "☁️",
       skills: [
         { name: "Azure", Icon: VscAzure, color: "#0078D4" },
@@ -110,7 +112,7 @@ export default function Skills() {
       ]
     },
     {
-      title: "Herramientas",
+      title: t.skills.categories.tools,
       icon: "🛠️",
       skills: [
         { name: "Git", Icon: SiGit, color: "#F05032" },
@@ -122,7 +124,7 @@ export default function Skills() {
       ]
     },
     {
-      title: "Diseño & Otros",
+      title: t.skills.categories.design,
       icon: "🎨",
       skills: [
         { name: "UI/UX Design", Icon: MdDesignServices, color: "#FF61F6" },
@@ -146,11 +148,11 @@ export default function Skills() {
           ref={titleRef}
           className="text-4xl md:text-6xl font-bold mb-6 text-center"
         >
-          Tecnologías & <span className="text-gradient-blue">Herramientas</span>
+          {t.skills.title} <span className="text-gradient-blue">{t.skills.titleHighlight}</span>
         </h2>
 
         <p className="text-center text-gray-400 text-lg md:text-xl mb-16 max-w-2xl mx-auto">
-          Stack completo de tecnologías para desarrollo Full Stack
+          {t.skills.subtitle}
         </p>
 
         {/* Grid de categorías */}
@@ -231,7 +233,7 @@ export default function Skills() {
             href="#projects"
             className="inline-block px-8 py-4 bg-white text-black rounded-full text-lg font-semibold hover:bg-white/90 transition-all duration-300 hover:scale-105"
           >
-            Ver Proyectos →
+            {t.skills.cta}
           </a>
         </div>
       </div>

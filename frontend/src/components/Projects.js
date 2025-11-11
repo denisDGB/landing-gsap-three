@@ -3,11 +3,13 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useLanguage } from "../contexts/LanguageContext";
 import Image from "next/image";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Projects() {
+  const { t } = useLanguage();
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
   const projectsRef = useRef(null);
@@ -94,7 +96,7 @@ export default function Projects() {
           ref={titleRef}
           className="text-4xl md:text-6xl font-bold mb-20 text-center"
         >
-          Proyectos <span className="text-gradient-blue">Destacados</span>
+          {t.projects.title} <span className="text-gradient-blue">{t.projects.titleHighlight}</span>
         </h2>
 
         {/* Grid de proyectos */}

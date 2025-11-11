@@ -102,21 +102,15 @@ export default function About() {
           {/* Contenido - Derecha */}
           <div ref={contentRef} className="space-y-6">
             <p className="text-lg md:text-xl text-gray-300 leading-relaxed text-justify">
-              Soy un <span className="text-white font-semibold">desarrollador Full Stack</span> especializado en 
-              crear soluciones completas de software. Trabajo con tecnologías modernas tanto en el frontend como 
-              en el backend, diseñando arquitecturas escalables y eficientes.
+              {t.about.paragraph1} <span className="text-white font-semibold">{t.about.paragraph1Bold}</span> {t.about.paragraph1Rest}
             </p>
 
             <p className="text-lg md:text-xl text-gray-300 leading-relaxed text-justify">
-              Con más de <span className="text-white font-semibold">2 años de experiencia</span>, he desarrollado 
-              aplicaciones web completas, implementado bases de datos robustas y desplegado proyectos en la nube. 
-              Mi enfoque está en crear productos de alta calidad con las mejores prácticas de desarrollo.
+              {t.about.paragraph2} <span className="text-white font-semibold">{t.about.paragraph2Bold}</span>{t.about.paragraph2Rest}
             </p>
 
             <p className="text-lg md:text-xl text-gray-300 leading-relaxed text-justify">
-              Domino desde el diseño de interfaces hasta la gestión de servidores, pasando por APIs REST, bases de 
-              datos relacionales y herramientas de DevOps. Siempre estoy aprendiendo nuevas tecnologías para ofrecer 
-              las mejores soluciones.
+              {t.about.paragraph3}
             </p>
 
                     {/* CTA */}

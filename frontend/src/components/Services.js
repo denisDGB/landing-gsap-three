@@ -3,10 +3,12 @@
 import { useEffect, useRef } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useLanguage } from "../contexts/LanguageContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Services() {
+  const { t } = useLanguage();
   const sectionRef = useRef(null);
   const titleRef = useRef(null);
   const cardsRef = useRef(null);
@@ -14,39 +16,39 @@ export default function Services() {
   const services = [
     { 
       icon: "💻",
-      title: "Desarrollo Frontend", 
-      description: "Interfaces modernas y responsivas con React, Next.js y TypeScript. Diseño UI/UX intuitivo y animaciones fluidas.",
-      features: ["React & Next.js", "TypeScript", "Tailwind CSS"]
+      title: t.services.service1.title, 
+      description: t.services.service1.description,
+      features: t.services.service1.features
     },
     { 
       icon: "⚙️",
-      title: "Desarrollo Backend", 
-      description: "APIs REST robustas y escalables con Node.js, Java, Python y PHP. Arquitectura de microservicios y servicios en la nube.",
-      features: ["Node.js", "Java", "Python & PHP"]
+      title: t.services.service2.title, 
+      description: t.services.service2.description,
+      features: t.services.service2.features
     },
     { 
       icon: "🗄️",
-      title: "Bases de Datos", 
-      description: "Diseño e implementación de bases de datos relacionales optimizadas con MySQL, PostgreSQL, MariaDB y Azure SQL.",
-      features: ["MySQL", "PostgreSQL", "Azure SQL"]
+      title: t.services.service3.title, 
+      description: t.services.service3.description,
+      features: t.services.service3.features
     },
     { 
       icon: "☁️",
-      title: "Cloud & DevOps", 
-      description: "Deploy y gestión de aplicaciones en la nube con Azure, Docker, Jenkins, Vercel y Railway. CI/CD automatizado.",
-      features: ["Azure", "Docker", "Jenkins"]
+      title: t.services.service4.title, 
+      description: t.services.service4.description,
+      features: t.services.service4.features
     },
     { 
       icon: "🔌",
-      title: "APIs & Integración", 
-      description: "Desarrollo de APIs REST, integración de servicios externos y WebSockets para aplicaciones en tiempo real.",
-      features: ["REST APIs", "WebSockets", "Postman"]
+      title: t.services.service5.title, 
+      description: t.services.service5.description,
+      features: t.services.service5.features
     },
     { 
       icon: "🛠️",
-      title: "Full Stack Apps", 
-      description: "Aplicaciones web completas de punta a punta, desde la base de datos hasta el frontend, con deploy en producción.",
-      features: ["MERN/MEAN Stack", "WordPress", "E-commerce"]
+      title: t.services.service6.title, 
+      description: t.services.service6.description,
+      features: t.services.service6.features
     },
   ];
 
@@ -107,11 +109,11 @@ export default function Services() {
           ref={titleRef}
           className="text-4xl md:text-6xl font-bold mb-6 text-center"
         >
-          Mis <span className="text-gradient-blue">Servicios</span>
+          {t.services.title} <span className="text-gradient-blue">{t.services.titleHighlight}</span>
         </h2>
 
         <p className="text-center text-gray-400 text-lg md:text-xl mb-20 max-w-2xl mx-auto">
-          Transformo ideas en experiencias digitales memorables con las últimas tecnologías
+          {t.services.subtitle}
         </p>
 
         {/* Grid de servicios */}

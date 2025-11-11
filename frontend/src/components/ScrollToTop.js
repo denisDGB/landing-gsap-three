@@ -3,10 +3,12 @@
 import { useState, useEffect } from "react";
 import { gsap } from "gsap";
 import { ScrollToPlugin } from "gsap/ScrollToPlugin";
+import { useLanguage } from "../contexts/LanguageContext";
 
 gsap.registerPlugin(ScrollToPlugin);
 
 export default function ScrollToTop() {
+  const { t } = useLanguage();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -77,7 +79,7 @@ export default function ScrollToTop() {
       onMouseLeave={handleMouseLeave}
       className="fixed bottom-6 right-6 z-50 w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 text-white rounded-full shadow-lg shadow-blue-500/30 flex items-center justify-center group opacity-0"
       style={{ pointerEvents: isVisible ? "auto" : "none" }}
-      aria-label="Volver arriba"
+      aria-label={t.scrollToTop}
     >
       {/* Efecto de brillo animado */}
       <div className="absolute inset-0 rounded-full bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
